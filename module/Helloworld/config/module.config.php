@@ -18,9 +18,19 @@ return array(
         )
     ),
     'controllers' => array( 
-        'invokables' => array(
+        'factories' => array(
             'Helloworld\Controller\Index' => 
-                'Helloworld\Controller\IndexController'
+                function($serviceLocator) 
+                {
+                    $ctr = new Helloworld\Controller\IndexController();
+                    $ctr->setGreetingService($serviceLocator->getServiceLocator()->get('greetingService'));
+                    return $ctr;
+                }
+        )
+    ),
+    'service_manager' => array(
+        'invokables' => array(
+            'greetingService' => 'Helloworld\Service\GreetingService'
         )
     )
 );
