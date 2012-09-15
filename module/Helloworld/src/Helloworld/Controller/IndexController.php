@@ -10,7 +10,11 @@ class IndexController extends AbstractActionController
 
     public function indexAction() 
     {
-        return new ViewModel(array('greeting' => $this->greetingService->getGreeting()));
+        return new ViewModel(
+            array(
+                'greeting' => $this->greetingService->getGreeting()
+            )
+        );
     }
 
     public function setGreetingService($service)
