@@ -1,7 +1,23 @@
 <?php
-$this->form->prepare();
-echo $this->form()->openTag($this->form);
-echo $this->formRow($this->form->get('username'));
-echo $this->formRow($this->form->get('password'));
-echo $this->formSubmit($this->form->get('submit'));
-echo $this->form()->closeTag();
+if ($this->loginSuccess) { ?>
+    <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <?php  echo "Hello, " . $this->userLoggedIn . '!'; ?>
+            </div>
+<?php   
+} else {
+    if ($this->loginError) { ?>
+            <div class="alert alert-error">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                Die eingegebenen Daten sind ungültig.
+            </div>
+<?php
+    }
+    
+    $this->form->prepare();
+    echo $this->form()->openTag($this->form);
+    echo $this->formRow($this->form->get('username'));
+    echo $this->formRow($this->form->get('password'));
+    echo $this->formSubmit($this->form->get('submit'));
+    echo $this->form()->closeTag();
+}

@@ -26,6 +26,16 @@ return array(
                         'action'        => 'login'
                     )
                 )
+            ),
+            'logout' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/logout',
+                    'defaults' => array(
+                        'controller'    => 'Helloworld\Controller\Auth',
+                        'action'        => 'logout'
+                    )
+                )
             )
         )
     ),
@@ -38,18 +48,30 @@ return array(
                     $ctr->setGreetingService($serviceLocator->getServiceLocator()->get('greetingService'));
                     return $ctr;
                 },
-            'Helloworld\Controller\Auth' =>
-                function(ServiceLocatorInterface $serviceLocator)
-                {
-                    $ctr = new Helloworld\Controller\AuthController();
-                    $ctr->setLoginForm(new \Helloworld\Form\Login());
-                    return $ctr;
-                }
+            'Helloworld\Controller\Auth' => 'Helloworld\Controller\AuthControllerFactory',
+            'Navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         )
     ),
     'service_manager' => array(
         'invokables' => array(
             'greetingService' => 'Helloworld\Service\GreetingService'
+        ),
+        'factories' => array(
+            'Zend\Db\Adapter\Adapter' => function($sm) {
+                $config = $sm->get('Config');
+                $dbParams = $config['dbParams'];
+                
+                return new Zend\Db\Adapter(array(
+                    'driver'    => 'pdo',
+                    'dsn'       => 'mysql:dbname='.$dbParams['database'].'host='
+                        .$dbParams['hostname'],
+                    'database' => $dbParams['database'],
+                    'username' => $dbParams['username'],
+                    'password' => $dbParams['password'],
+                    'hostname' => $dbParams['hostname'],
+                ));
+            },
+            'Helloworld\Service\AuthService' => 'Helloworld\Service\AuthServiceFactory'
         )
     )
 );
