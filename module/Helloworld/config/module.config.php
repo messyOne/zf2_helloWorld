@@ -1,4 +1,5 @@
 <?php
+
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 return array(
@@ -12,8 +13,8 @@ return array(
                 'options' => array(
                     'route' => '/sayhello',
                     'defaults' => array(
-                        'controller'    => 'Helloworld\Controller\Index',
-                        'action'        => 'index',
+                        'controller' => 'Helloworld\Controller\Index',
+                        'action' => 'index',
                     )
                 ),
             ),
@@ -22,8 +23,8 @@ return array(
                 'options' => array(
                     'route' => '/login',
                     'defaults' => array(
-                        'controller'    => 'Helloworld\Controller\Auth',
-                        'action'        => 'login'
+                        'controller' => 'Helloworld\Controller\Auth',
+                        'action' => 'login'
                     )
                 )
             ),
@@ -32,22 +33,31 @@ return array(
                 'options' => array(
                     'route' => '/logout',
                     'defaults' => array(
-                        'controller'    => 'Helloworld\Controller\Auth',
-                        'action'        => 'logout'
+                        'controller' => 'Helloworld\Controller\Auth',
+                        'action' => 'logout'
+                    )
+                )
+            ),
+            'hello' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/hello',
+                    'defaults' => array(
+                        'controller' => 'Helloworld\Controller\Index',
+                        'action' => 'hello',
                     )
                 )
             )
         )
     ),
-    'controllers' => array( 
+    'controllers' => array(
         'factories' => array(
-            'Helloworld\Controller\Index' => 
-                function(ServiceLocatorInterface $serviceLocator) 
-                {
-                    $ctr = new Helloworld\Controller\IndexController();
-                    $ctr->setGreetingService($serviceLocator->getServiceLocator()->get('greetingService'));
-                    return $ctr;
-                },
+            'Helloworld\Controller\Index' =>
+            function(ServiceLocatorInterface $serviceLocator) {
+                $ctr = new Helloworld\Controller\IndexController();
+                $ctr->setGreetingService($serviceLocator->getServiceLocator()->get('greetingService'));
+                return $ctr;
+            },
             'Helloworld\Controller\Auth' => 'Helloworld\Controller\AuthControllerFactory',
             'Navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         )
@@ -60,18 +70,35 @@ return array(
             'Zend\Db\Adapter\Adapter' => function($sm) {
                 $config = $sm->get('Config');
                 $dbParams = $config['dbParams'];
-                
+
                 return new Zend\Db\Adapter(array(
-                    'driver'    => 'pdo',
-                    'dsn'       => 'mysql:dbname='.$dbParams['database'].'host='
-                        .$dbParams['hostname'],
-                    'database' => $dbParams['database'],
-                    'username' => $dbParams['username'],
-                    'password' => $dbParams['password'],
-                    'hostname' => $dbParams['hostname'],
-                ));
+                            'driver' => 'pdo',
+                            'dsn' => 'mysql:dbname=' . $dbParams['database'] . 'host='
+                            . $dbParams['hostname'],
+                            'database' => $dbParams['database'],
+                            'username' => $dbParams['username'],
+                            'password' => $dbParams['password'],
+                            'hostname' => $dbParams['hostname'],
+                        ));
             },
-            'Helloworld\Service\AuthService' => 'Helloworld\Service\AuthServiceFactory'
+            'Helloworld\Service\AuthService' => 'Helloworld\Service\AuthServiceFactory',
+            'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
         )
-    )
+    ),
+                    
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'date' => array(
+                    'options' => array(
+                        'route' => 'show date [--format=]',
+                        'defaults' => array(
+                            'controller' => 'Helloworld\Controller\Index',
+                            'action' => 'date'
+                        )
+                    )
+                )
+            )
+        )
+    ),
 );

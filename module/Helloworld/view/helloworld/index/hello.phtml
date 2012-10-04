@@ -1,0 +1,6 @@
+<?php
+echo $this->currencyFormat($this->price, "EUR");
+echo '<br /><br />';
+echo $this->dateFormat($this->date, \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE);
+echo '<br /><br />';
+echo $this->numberFormat($this->number);
