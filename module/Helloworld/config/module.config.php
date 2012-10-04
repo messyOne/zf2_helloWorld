@@ -4,7 +4,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 return array(
     'view_manager' => array(
-        'template_path_stack' => array(__DIR__ . '/../view')
+        'template_path_stack' => array(__DIR__ . '/../view'),
+        'strategies' => array(
+            'ViewJsonStrategy',
+        )
     ),
     'router' => array(
         'routes' => array(
@@ -47,7 +50,26 @@ return array(
                         'action' => 'hello',
                     )
                 )
-            )
+            ),
+            'helloAjax' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/helloAjax',
+                    'defaults' => array(
+                        'controller' => 'Helloworld\Controller\Auth',
+                        'action' => 'hello',
+                    )
+                )
+            ),
+            'restful-products' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/rest/product',
+                    'defaults' => array(
+                        'controller' => 'Helloworld\Controller\Product'
+                    )
+                )
+            ),
         )
     ),
     'controllers' => array(
@@ -60,11 +82,14 @@ return array(
             },
             'Helloworld\Controller\Auth' => 'Helloworld\Controller\AuthControllerFactory',
             'Navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
+        ),
+        'invokables' => array(
+            'Helloworld\Controller\Product' => 'Helloworld\Controller\ProductController',
         )
     ),
     'service_manager' => array(
         'invokables' => array(
-            'greetingService' => 'Helloworld\Service\GreetingService'
+            'greetingService' => 'Helloworld\Service\GreetingService',
         ),
         'factories' => array(
             'Zend\Db\Adapter\Adapter' => function($sm) {
@@ -85,7 +110,6 @@ return array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
         )
     ),
-                    
     'console' => array(
         'router' => array(
             'routes' => array(

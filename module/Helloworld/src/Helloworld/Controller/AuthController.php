@@ -3,6 +3,7 @@ namespace Helloworld\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 class AuthController extends AbstractActionController
 {
@@ -73,6 +74,18 @@ class AuthController extends AbstractActionController
         }
         
         $this->redirect()->toUrl('/login');
+    }
+    
+    public function helloAction()
+    {
+        $result = new ViewModel(
+            array(
+                'greeting' => 'hello world',
+            )
+        );
+        
+        $result->setTerminal(true);
+        return $result;
     }
 
     public function setLoginForm($loginForm)
